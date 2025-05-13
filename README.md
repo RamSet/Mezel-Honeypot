@@ -1,104 +1,154 @@
 # Mezel Honeypot
-
-**A deceptive TCP sentinel engineered for reconnaissance, misdirection, and automated threat elevation.**
+**An active threat intelligence engine for deception, detection, and dynamic response.**
 
 ---
 
 ## Overview
 
-**Mezel** is a lightweight, tactical honeypot designed for modern network environments where stealth, precision, and intelligence collection take priority over imitation.
+**Mezel** isn’t just a honeypot — it’s an evolving **threat operations platform**.  
+Built from the ground up through hundreds of iterations and field-tested edge cases, Mezel detects, classifies, and responds to hostile network traffic with surgical precision.
 
-Rather than simulating full services like SSH or HTTP, Mezel operates like a **tripwire wrapped in a black box**—detecting, fingerprinting, and reporting intrusions without revealing its hand.
+Designed for operators, security teams, and research environments that demand more than logs — Mezel delivers **actionable intelligence** and the ability to respond in real time.
 
 ---
 
 ## Why Mezel?
 
-Most honeypots try to pretend.  
-**Mezel doesn't. It listens, learns, and leaks attacker intel upstream.**
+Other honeypots try to fool attackers.  
+**Mezel doesn’t play games — it collects evidence and pulls triggers.**
 
-Mezel is built for operators who:
-
-- Need immediate, high-signal alerts from inbound threats
-- Prefer reaction and containment over engagement
-- Want tight integration with real-world intel platforms (e.g. AbuseIPDB)
-- Deploy honeypots **as tactical sensors**, not playgrounds
+It’s built for environments where:
+- **Speed and signal matter more than simulation**
+- **Deception is a tactic, not a gimmick**
+- **Threat data must flow upward, outward, and into enforcement layers**
 
 ---
 
-## Key Characteristics
+## Current Capabilities
 
-- **Passive OS Fingerprinting**  
-  Uses TCP behavior to infer attacker operating systems—*without sending a single packet back*.
+### Modular Intelligence Stack
+Mezel is composed of decoupled, resilient modules:
+- **AbuseIPDB Reporter** (offline-aware, cached, rate-limited)
+- **YARA Payload Scanner**
+- **ZyWALL + Fortinet Firewall Integrators**
+- **Passive Fingerprinter**
+- **Entropy Analyzer**
+- **Geo Dashboard Renderer**
+- **Pushover Notification Engine**
 
-- **Port Randomization & Rotation**  
-  Avoids static signatures by listening on randomized ports each session.
+Each module is deployable, restartable, and independently testable.
 
-- **Entropy Profiling**  
-  Analyzes inbound payload structure—distinguishes scanners from toolkits, scripts from shells.
+---
 
-- **Threshold-Based Escalation**  
-  Built-in emergency logic: when enough hits are detected, Mezel doesn't just log—it **adapts**.
+### Firewall-Integrated Deception
+- **ZyWALL integration**: MAC-to-IP mapping, threat containment
+- **Fortinet roadmap**: Real-time API interaction to enable address bans, tag sessions, or trigger FortiAnalyzer events
+- This turns Mezel into **an automated enforcement node**, not just a sensor.
 
-- **External Intelligence Reporting**  
-  Automatically reports verified hits to AbuseIPDB and can integrate with other feeds.
+---
+
+### Live Payload Triage with YARA
+Inbound data is scanned against YARA signatures to detect:
+- Malware families
+- Botnet payloads
+- Encoded reverse shells
+- Exploit kit markers
+
+This lets you classify attacks immediately, not retroactively.
+
+---
+
+### Full Internet-Aware Abuse Reporting
+- Sends structured reports to AbuseIPDB
+- Includes attacker IP, port, payload, entropy, matched YARA rules, and context
+- Smart queuing: delays submission when internet drops
+- Smart notifications: resumes when back online, notifies of backlogs, clears, and first success
+
+---
+
+### Dashboard Telemetry
+- Map visualizations of incoming hits
+- Payload previews with syntax highlighting
+- Live entropy and YARA-tagged feed
+- Optional auto-refresh for SOC displays
+
+---
+
+### Real-Time Alerting
+Pushover notifications for:
+- First hit
+- Abuse submission success/failure
+- Queue overload
+- Internet loss/recovery
+- Daemon shutdowns
+
+---
+
+### Built to Operate Unattended
+- Can run headless on Raspberry Pi
+- Works on ARM or x86
+- Systemd-managed, service-ready
+- Survives power loss, network failure, or abuse floods
 
 ---
 
 ## Analogy for the Non-Technical
 
-> **Imagine your network is a locked building.**  
->  
-> **Mezel is not the guard at the front door.**  
-> It’s the **fake electrical panel** in a utility closet. When a thief jimmies it open thinking it's vulnerable,  
-> Mezel silently snaps a photo, triggers a silent alarm, and relays it to every nearby police unit—  
-> **before the thief even knows he tripped a wire.**
+> Imagine your network is a house.  
+> You don’t put Mezel at the front door — you put it **inside the wall, behind a fake outlet**.  
+>
+> When a burglar pokes it thinking it’s a weak point, Mezel:
+> - **Fingerprints their tools**
+> - **Captures a copy of their lockpick**
+> - **Scans the fingerprint against a criminal database**
+> - **Notifies security instantly**
+> - And if you’re connected to smart locks or drones,  
+>   **it’ll lock them in the hallway before they know what hit them.**
 
 ---
 
 ## Use Cases
 
-- **Private threat intelligence collection**
-- **Edge deception systems** in corporate or personal networks
-- **SOC/IR team augmentation**
-- **Cyber observability nodes** in dark zones or DMZs
+- **SOHO + Enterprise Deception Layer**
+- **Threat Research Collection**
+- **Automated Abuse Reporter**
+- **Firewall-Orchestrated Containment**
+- **Live Attack Dashboard Feeds**
 
 ---
 
-## How It's Different
+## Comparison Matrix
 
 | Feature                     | Mezel                   | Cowrie         | Glastopf       | T-Pot              |
 |----------------------------|-------------------------|----------------|----------------|--------------------|
 | Full protocol emulation    | No                      | SSH/Telnet     | HTTP           | Mixed              |
 | Passive TCP fingerprinting | Yes                     | No             | No             | Partial            |
 | Entropy scoring            | Yes                     | No             | No             | No                 |
-| Auto escalation            | Yes (MAC/IP block, etc) | No             | No             | Varies             |
-| External reporting         | Yes (AbuseIPDB, etc)    | Manual         | Manual         | Optional           |
-| Setup complexity           | Low                     | Medium         | Low            | High (multi-service)|
+| YARA scanning              | Yes                     | No             | No             | No                 |
+| Abuse reporting            | Yes (robust)            | Manual         | Manual         | Optional           |
+| Offline awareness          | Yes                     | No             | No             | No                 |
+| Fortinet/ZyWALL firewall   | Yes (live & roadmap)    | No             | No             | No                 |
+| Dashboard telemetry        | Yes                     | No             | No             | Varies             |
+| Setup complexity           | Moderate                | Medium         | Low            | High               |
 
 ---
 
-## Status
+## Development Status
 
-- Currently in **field testing**
-- Stable on Raspberry Pi and Linux servers
-- Actively being refined with operational feedback
+- Stable and field-hardened
+- Modularized into deployable components
+- Actively expanding Fortinet support
+- Ready for testbeds, darknets, SOCs, or live edge deployments
 
 ---
 
 ## License
 
-Private / Restricted Use  
-(Ask before deployment in shared or academic environments)
-
----
-
-## Contributing
-
-This project does not accept open pull requests yet, but feedback and usage insights are welcomed.
+Private / Controlled Use  
+(Request access for threat labs, security orgs, or academic research)
 
 ---
 
 ## Contact
 
-For inquiries or controlled access, contact the project maintainer via this GitHub profile or encrypted channel.
+Reach out via GitHub or secure messaging for deployment requests, contributions, or integration discussions.
